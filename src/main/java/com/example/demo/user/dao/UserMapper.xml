@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.user.dao.UserMapper">
+
+    <update id="dropTable">
+        drop table if exists ${tableName}
+    </update>
+
+    <update id="createTableUser">
+       CREATE TABLE user_${suffix} (
+          `user_id` int(11) NOT NULL,
+          `mobile` varchar(255) NOT NULL,
+          `icon` varchar(255) DEFAULT NULL,
+          `nickname` varchar(255) DEFAULT NULL,
+          PRIMARY KEY (`user_id`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    </update>
+
+    <update id="createTableUserMobile">
+        CREATE TABLE user_mobile_${suffix} (
+          `mobile` varchar(15) NOT NULL,
+          `user_id` int(11) NOT NULL,
+          PRIMARY KEY (`mobile`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    </update>
+
+    <select id="getMaxUserId" resultType="java.lang.Integer">
+        select max(user_id) from user_${suffix}
+    </select>
+
+    <select id="getUserByMobile" resultType="java.lang.Integer">
+        select user_id from user_mobile_${suffix} where mobile = #{mobile}
+    </select>
+
+    <insert id="insertUser">
+        insert into user_${suffix}
+        (`user_id`, `mobile`,  `icon`, `nickname`)
+        values
+        (#{user.userId},#{user.mobile},#{user.icon},#{user.nickname})
+    </insert>
+
+    <insert id="insertUserMobile">
+        insert into user_mobile_${suffix}
+        (`mobile`,`user_id`) values (#{mobile},#{userId})
+    </insert>
+</mapper>
